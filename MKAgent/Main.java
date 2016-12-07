@@ -52,7 +52,7 @@ public class Main
 	 * The main method, invoked when the program is started.
 	 * @param args Command line arguments.
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		// TODO: implement
     // Getting first message, looking for it to be the start message, if start,
@@ -64,7 +64,7 @@ public class Main
 
     if(msgType == MsgType.START)
     {
-      playing == true;
+      playing = true;
     }
     else
     {
@@ -72,6 +72,6 @@ public class Main
     }
 
     boolean sideSelected = Protocol.interpretStartMsg(recvMsg());
-    Sring side = sideSelected ? "South" : "North";
+    String side = sideSelected ? "South" : "North";
 	}
 }
