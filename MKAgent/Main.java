@@ -55,5 +55,23 @@ public class Main
 	public static void main(String[] args)
 	{
 		// TODO: implement
+    // Getting first message, looking for it to be the start message, if start,
+    // set isPLaying to true, and set side.
+
+    String message = recvMsg();
+    MsgType msgType = Protocol.getMessageType(message);
+    boolean playing = false;
+
+    if(msgType == MsgType.START)
+    {
+      playing == true;
+    }
+    else
+    {
+      throw new Exception();
+    }
+
+    boolean sideSelected = Protocol.interpretStartMsg(recvMsg());
+    Sring side = sideSelected ? "South" : "North";
 	}
 }
