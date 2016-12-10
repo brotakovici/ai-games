@@ -1,4 +1,5 @@
 package MKAgent;
+import java.util.List;
 
 public class Node
 {
@@ -6,9 +7,10 @@ public class Node
   private Node parentNode;
   private List<Node> children;
 
-  private List<Board> createChildren(Board board)
+  private List<Node> createChildren(Board board)
   {
-    return new List<Board>();
+    // Aici e o nebunie
+    return null;
   }
 
   public Node(Board board)
