@@ -124,12 +124,7 @@ public class Main
 
 							// @SuperMove
 							if (first){
-<<<<<<< HEAD
-=======
-								// msj = Protocol.createMoveMsg(1);
-								// sendMsg(msj);
 								mySide = SOUTH;
->>>>>>> e014861d52095539a95eaffd6fa4ea1fb318af4b
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
 							} // if
