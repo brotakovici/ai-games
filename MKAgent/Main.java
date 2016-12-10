@@ -56,6 +56,7 @@ public class Main
 	{
     	try {
 			String s, msj;
+			Board b = new Board(7,7);
 			while (true){
 				System.err.println();
 				s = recvMsg();
@@ -69,7 +70,6 @@ public class Main
 							System.err.println("Starting player? " + first);
 							break; // Start
 						case STATE: 
-							Board b = new Board(7,7); 
 							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
