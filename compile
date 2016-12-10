@@ -2,3 +2,4 @@
 
 rm MKAgent/*.class
 javac MKAgent/*
+java -jar ManKalah.jar "java MKAgent/Main" "nc localhost 12345"
