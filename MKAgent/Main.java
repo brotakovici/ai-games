@@ -56,6 +56,7 @@ public class Main
 	{
     	try {
 			String s, msj;
+			boolean first = true;
 			Board b = new Board(7,7);
 			while (true){
 				System.err.println();
@@ -66,25 +67,28 @@ public class Main
 					switch (mt) {
 						case START:
 							System.err.println("A start.");
-							boolean first = Protocol.interpretStartMsg(s);
+							first = Protocol.interpretStartMsg(s);
 
-							/*
-								@SuperMove
-							 	0 — 7 8 8 8 8 8 8
-        						0 8 8 8 8 81 0 — 2
-
+							// @SuperMove
 							if (first){
-								msj = Protocol.createMoveMsg(1);
-								sendMsg(msj);
-								msj = Protocol.createMoveMsg(7);
+								// msj = Protocol.createMoveMsg(1);
+								// sendMsg(msj);
+								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
 							} // if
-							*/
 
 							System.err.println("Starting player? " + first);
 							break; // Start
 						case STATE: 
 							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
+
+							// @SwapMove
+							if (!first && r.move == b.getNoOfHoles()) {
+								first = true;
+								msj = Protocol.createSwapMsg();
+								sendMsg(msj);
+							} // if
+
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
 							System.err.println("Is the game over? " + r.end);
