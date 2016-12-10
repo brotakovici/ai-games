@@ -56,23 +56,22 @@ public class Main
 	{
     	try {
 			String s, msj;
-			while (true)
-			{
+			while (true){
 				System.err.println();
 				s = recvMsg();
 				System.err.print("Received: " + s);
 				try {
 					MsgType mt = Protocol.getMessageType(s);
 					switch (mt) {
-						case START: 
+						case START:
 							System.err.println("A start.");
 							boolean first = Protocol.interpretStartMsg(s);
 							System.err.println("Starting player? " + first);
 							break; // Start
 						case STATE: 
-							System.err.println("A state.");
-							Board b = new Board(7,7);
+							Board b = new Board(7,7); 
 							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
+							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
 							System.err.println("Is the game over? " + r.end);
 							if (!r.end) System.err.println("Is it our turn again? " + r.again);
@@ -85,7 +84,7 @@ public class Main
 				} /* try */ catch (InvalidMessageException e) {
 					System.err.println(e.getMessage());
 				} // catch
-			}
+			} // while
 		} /* try */ catch (IOException e) {
 			System.err.println("This shouldn't happen: " + e.getMessage());
 		} // catch
