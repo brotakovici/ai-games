@@ -71,8 +71,6 @@ public class Main
 
 							// @SuperMove
 							if (first){
-								// msj = Protocol.createMoveMsg(1);
-								// sendMsg(msj);
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
 							} // if
@@ -81,6 +79,11 @@ public class Main
 							break; // Start
 						case STATE: 
 							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
+
+							// If opponent swaps
+							if (r.move == -1){
+								// TO DO
+							}
 
 							// @SwapMove
 							if (!first && r.move == b.getNoOfHoles()) {
