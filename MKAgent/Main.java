@@ -67,6 +67,20 @@ public class Main
 						case START:
 							System.err.println("A start.");
 							boolean first = Protocol.interpretStartMsg(s);
+
+							/*
+								@SuperMove
+							 	0 — 7 8 8 8 8 8 8
+        						0 8 8 8 8 81 0 — 2
+
+							if (first){
+								msj = Protocol.createMoveMsg(1);
+								sendMsg(msj);
+								msj = Protocol.createMoveMsg(7);
+								sendMsg(msj);
+							} // if
+							*/
+
 							System.err.println("Starting player? " + first);
 							break; // Start
 						case STATE: 
