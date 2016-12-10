@@ -54,8 +54,7 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-    try
-		{
+    	try {
 			String s, msj;
 			while (true)
 			{
@@ -64,35 +63,31 @@ public class Main
 				System.err.print("Received: " + s);
 				try {
 					MsgType mt = Protocol.getMessageType(s);
-					switch (mt)
-					{
-						case START: System.err.println("A start.");
+					switch (mt) {
+						case START: 
+							System.err.println("A start.");
 							boolean first = Protocol.interpretStartMsg(s);
 							System.err.println("Starting player? " + first);
-							msj = Protocol.createMoveMsg(3);
-							sendMsg(msj);
-							break;
-						case STATE: System.err.println("A state.");
+							break; // Start
+						case STATE: 
+							System.err.println("A state.");
 							Board b = new Board(7,7);
-							Protocol.MoveTurn r = Protocol.interpretStateMsg (s, b);
+							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
 							System.err.println("This was the move: " + r.move);
 							System.err.println("Is the game over? " + r.end);
 							if (!r.end) System.err.println("Is it our turn again? " + r.again);
-							msj = Protocol.createMoveMsg(3);
-							sendMsg(msj);
 							System.err.print("The board:\n" + b);
-							break;
-						case END: System.err.println("An end. Bye bye!"); return;
-					}
-
-				} catch (InvalidMessageException e) {
+							break; // State
+						case END: 
+							System.err.println("An end. Bye bye!"); 
+							return; // END
+					} // switch
+				} /* try */ catch (InvalidMessageException e) {
 					System.err.println(e.getMessage());
-				}
+				} // catch
 			}
-		}
-		catch (IOException e)
-		{
+		} /* try */ catch (IOException e) {
 			System.err.println("This shouldn't happen: " + e.getMessage());
-		}
-  }
-}
+		} // catch
+  } // main
+} // Main
