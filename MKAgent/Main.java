@@ -54,13 +54,9 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		// TODO: implement
-
-
-
     try
 		{
-			String s;
+			String s, msj;
 			while (true)
 			{
 				System.err.println();
@@ -73,13 +69,17 @@ public class Main
 						case START: System.err.println("A start.");
 							boolean first = Protocol.interpretStartMsg(s);
 							System.err.println("Starting player? " + first);
+							msj = Protocol.createMoveMsg(3);
+							sendMsg(msj);
 							break;
 						case STATE: System.err.println("A state.");
-							Board b = new Board(6,6);
+							Board b = new Board(7,7);
 							Protocol.MoveTurn r = Protocol.interpretStateMsg (s, b);
 							System.err.println("This was the move: " + r.move);
 							System.err.println("Is the game over? " + r.end);
 							if (!r.end) System.err.println("Is it our turn again? " + r.again);
+							msj = Protocol.createMoveMsg(3);
+							sendMsg(msj);
 							System.err.print("The board:\n" + b);
 							break;
 						case END: System.err.println("An end. Bye bye!"); return;
