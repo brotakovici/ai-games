@@ -4,31 +4,46 @@ import java.util.List;
 public class Node
 {
   private Side turn;
-  private int depth;
+  private int currentDepth;
   private Board board;
   private Node parentNode;
   private List<Node> children;
 
-  private List<Node> createChildren(Board board)
+  private List<Node> createChildren(Board board, int depth)
   {
     // Aici e o nebunie
-    return null;
+    List<Node> children = new List<Node>();
+    int maxPossibleMoves = board.getNoOfHoles();
+
+    for(int index = 1; index <= maxPossibleMoves; index++)
+    {
+      Board tempBoard = new Board(board);
+      // Make move, set currentDepth + 1, set turn, set parentNode
+    }
+
+    return children;
   }
 
   public Node(Board board, int depth, Side turn)
   {
+    this.currentDepth = 0;
     this.board = board;
     this.parentNode = null;
     this.depth = depth;
     this.turn = turn;
-    this.children = createChildren(this.board);
+    this.children = createChildren(this.board, depth);
   }
 
-  public Node(Board board, Node parentNode)
+  public Node(Board board, Node parentNode, Side turn)
   {
     this.board = board;
     this.parentNode = parentNode;
-    this.children = createChildren(this.board);
+    this.currentDepth = parentNode.currentDepth + 1;
+  }
+
+  public void setChildren(Board board, Depth depth)
+  {
+    // Force to set children to childrenless nodes
   }
 
   public List<Node> getChildren()
