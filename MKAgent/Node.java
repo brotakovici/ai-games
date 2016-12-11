@@ -8,6 +8,7 @@ public class Node
   private Board board;
   private Node parentNode;
   private List<Node> children;
+  private int moveMade;
 
   private List<Node> createChildren(Board board, int depth)
   {
@@ -18,19 +19,20 @@ public class Node
     for(int index = 1; index <= maxPossibleMoves; index++)
     {
       Board tempBoard = new Board(board);
-      // Make move, set currentDepth + 1, set turn, set parentNode
+      // Make move, set currentDepth + 1, set turn, set parentNode, move made to get there
     }
 
     return children;
   }
 
-  public Node(Board board, int depth, Side turn)
+  public Node(Board board, int depth, Side turn, int moveMade)
   {
     this.currentDepth = 0;
     this.board = board;
     this.parentNode = null;
     this.depth = depth;
     this.turn = turn;
+    this.moveMade = moveMade;
     this.children = createChildren(this.board, depth);
   }
 
