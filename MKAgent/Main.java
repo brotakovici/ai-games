@@ -136,7 +136,7 @@ public class Main
 
 							// If opponent swaps
 							if (r.move == -1){
-								// TO DO
+								mySide = NORTH;
 							}
 
 							// @SwapMove
