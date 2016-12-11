@@ -1,5 +1,5 @@
 package MKAgent;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Node
 {
@@ -7,13 +7,13 @@ public class Node
   private int currentDepth;
   private Board board;
   private Node parentNode;
-  private List<Node> children;
+  private ArrayList<Node> children;
   private int moveMade;
 
-  private List<Node> createChildren(Board board, int depth)
+  private ArrayList<Node> createChildren(Board board, int depth)
   {
     // Aici e o nebunie
-    List<Node> children = new List<Node>();
+    ArrayList<Node> children = new ArrayList<Node>();
     int maxPossibleMoves = board.getNoOfHoles();
 
     for(int index = 1; index <= maxPossibleMoves; index++)
@@ -30,10 +30,10 @@ public class Node
     this.currentDepth = 0;
     this.board = board;
     this.parentNode = null;
-    this.depth = depth;
+    this.currentDepth = depth;
     this.turn = turn;
     this.moveMade = moveMade;
-    this.children = createChildren(this.board, depth);
+    //this.children = createChildren(this.board, depth);
   }
 
   public Node(Board board, Node parentNode, Side turn)
@@ -43,12 +43,12 @@ public class Node
     this.currentDepth = parentNode.currentDepth + 1;
   }
 
-  public void setChildren(Board board, Depth depth)
+  public void setChildren(Board board, int depth)
   {
     // Force to set children to childrenless nodes
   }
 
-  public List<Node> getChildren()
+  public ArrayList<Node> getChildren()
   {
     return this.children;
   }
