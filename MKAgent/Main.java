@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+private Side mySide;
+
 /**
  * Method that handles the seed distribution once a move is simulated.
  */
 public void distSeeds (int seedNum, Side side, int holeNum, int noOfHoles, Board board, Side playerSide, Node currentNode)
 {
-        int index = holeNumm + 1;
+        int index = holeNum + 1;
+	board.setSeeds(side, holeNum, 0);
         while (seedNum != 0) && (index <= noOfHoles)
         {
                 seedNum--;
@@ -21,11 +24,20 @@ public void distSeeds (int seedNum, Side side, int holeNum, int noOfHoles, Board
         if (seeds != 0)
         {
                 if (side == playerSide)
-                        currentNode.gain++;
-                else
-                        currentNode.gain--;
-
-                seedNum--;
+		{
+			if (playerSide == mySide)
+			{
+				currentNode.gain++;
+				seedNum--;
+			}//if
+			
+			else
+			{
+				currentNode.gain--;
+				seedNum--;
+			}//else
+		}
+			
                 distSeeds(seedNum, side.opposite(), 0, noOfHoles, board, playerSide, currentNode);
         }//if
 
@@ -33,9 +45,14 @@ public void distSeeds (int seedNum, Side side, int holeNum, int noOfHoles, Board
 	{
                 if (side == playerSide) && (board.getSeeds(side, index) == 1)
                 {
-                        currentNode.gain += board.getSeedsOp(side, index);
+			if (playerSide == mySide)
+				currentNode.gain += board.getSeedsOp(side, index);
+			else
+				currentNode.gain -= board.getSeedsOp(side, index);
+				
                         board.setSeedsOp(side, index, 0);
                 }//if
+		
 		boolean noEnd = false;
 
 		for(int i = 1; i<= noOfHoles; i++)
@@ -50,7 +67,11 @@ public void distSeeds (int seedNum, Side side, int holeNum, int noOfHoles, Board
 		if (!noEnd)
 			for(int i = 1; i<= noOfHoles; i++)
 			{
-				currentNode.gain -= board.getSeeds(playerSide.opposite, i);
+				if (playerSide == mySide)
+					currentNode.gain -= board.getSeeds(playerSide.opposite, i);
+				else
+					currentNode.gain += board.getSeeds(playerSide.opposite, i);
+				
 				board.setSeeds(playerSide.opposite, i, 0);
 			}//for
 	}//else	
@@ -109,7 +130,7 @@ public class Main
     	try {
 			String s, msj;
 			boolean first = true;
-			Side mySide = NORTH;
+			mySide = NORTH;
 			Board b = new Board(7,7);
 			while (true){
 				System.err.println();
