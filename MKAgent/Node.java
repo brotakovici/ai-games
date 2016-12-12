@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class Node
 {
   private Side turn;
+  private Side botSide;
   private int currentDepth;
   private Board board;
   private Node parentNode;
@@ -11,6 +12,7 @@ public class Node
   private Move moveMade;
   private boolean isGameOver;
   private boolean isWon;
+  private in gain;
 
   private ArrayList<Node> createChildren(Board board)
   {
@@ -29,7 +31,15 @@ public class Node
         Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
 
         Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
-        children.add(child);
+
+	//Pe aici trebuie discutat putin. C U nxt M33ting.
+	if (child.getTurn() == this.getTurn)
+	  createChildren(child.getBoard());
+	else
+	{
+	  child.setGain(child.getBoard.getSeeds(child.getBotSide(), 0) - child.getBoard.getSeeds(child.getBotSide().opposite(), 0));
+          children.add(child);
+        }
       }
     }
 
@@ -44,6 +54,8 @@ public class Node
     this.currentDepth = 0;
     this.turn = turn;
     this.moveMade = null;
+    this.gain = 0;
+    this.botSide = turn;
     //this.children = createChildren(this.board, depth);
   }
 
@@ -55,12 +67,52 @@ public class Node
     this.currentDepth = parentNode.currentDepth + 1;
     this.isGameOver = isGameOver;
     this.moveMade = moveMade;
+    this.gain = 0;
+    this.botSide = this.getParent().getBotSide; 
   }
 
   // Lol India/China are o metoda de genu.
   public void generateChildren(Board board, int depth)
   {
+    while(depth)
+    {
+      this.createChildren(this.getBoard());
+      depth --;
+     
+      if (depth)
+      {
+	int worstGain = 1000;
+	Move worstParentMoveMade = new Move();
+
+        //for each child in children
+          if (worstGain > child.getGain())
+          {
+	    worstGain = child.getGain();
+            worstParentMoveMade = chil.getParent().getMoveMade();
+          }
+        
+        //Nu prea stiu cum sa o definesc deci nu e definita lista asta inca
+        worstMoves.add(worstParentMoveMade);
+	worstGains.add(worstGain);
+      }
+    }
     // Force to set children to childrenless nodes up to a depth
+  }
+
+  public Move getMoveToMake()
+  {
+    Move move = new Move();
+    //for moves in worstMoves
+    //CREIERUL S-A OPRIT
+    {
+      //gaseste maximul de la worst gains si baga  worst moveul care ii corespunde in PIZDA MA-SII... nu. in move.
+    }
+    return move;
+  }  
+
+  public Move getMoveMade()
+  {
+    return this.moveMade;
   }
 
   public ArrayList<Node> getChildren()
@@ -68,9 +120,34 @@ public class Node
     return this.children;
   }
 
+  public void setBotSide(Side side)
+  {
+    this.botSide = side;
+  }
+
+  public Side getBotSide(Side side)
+  {
+    return this.botSide;
+  }
+
+  public void setGain(int gain)
+  {
+    this.gain = gain;
+  }
+  
+  public int getGain()
+  {
+    return this.gain;
+  }
+
   public Board getBoard()
   {
     return this.board;
+  }
+
+  public Side getTurn()
+  {
+    return this.turn;
   }
 
   public Node getParent()
