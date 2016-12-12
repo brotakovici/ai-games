@@ -9,8 +9,10 @@ public class Node
   private Node parentNode;
   private ArrayList<Node> children;
   private int moveMade;
+  private boolean isGameOver;
+  private boolean isWon;
 
-  private ArrayList<Node> createChildren(Board board, int depth)
+  private ArrayList<Node> createChildren(Board board)
   {
     // Aici e o nebunie
     ArrayList<Node> children = new ArrayList<Node>();
@@ -19,36 +21,44 @@ public class Node
     for(int index = 1; index <= maxPossibleMoves; index++)
     {
       Board tempBoard = new Board(board);
-      Move attemptedMove = new Move(index, this.turn);
-      // Make move, set currentDepth + 1, set turn, set parentNode, move made to get there
-      /*
-      (simulatedBoard, getsTurn) = this.simulateMove(board, i)
-      create node
-      */
+      Move attemptedMove = new Move(this.turn, index);
+      Kalah maKalahInGuraLor = new Kalah(tempBoard);
+
+      if(maKalahInGuraLor.isLegalMove(attemptedMove))
+      {
+        Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
+
+        Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, index, maKalahInGuraLor.gameOver());
+        children.add(child);
+      }
     }
 
     return children;
   }
 
-  public Node(Board board, int depth, Side turn, int moveMade)
+  public Node(Board board, Side turn)
   {
     this.currentDepth = 0;
     this.board = board;
     this.parentNode = null;
-    this.currentDepth = depth;
+    this.currentDepth = 0;
     this.turn = turn;
-    this.moveMade = moveMade;
+    this.moveMade = -1;
     //this.children = createChildren(this.board, depth);
   }
 
-  public Node(Board board, Node parentNode, Side turn)
+  public Node(Board board, Node parentNode, Side turn, int moveMade, boolean isGameOver)
   {
     this.board = board;
     this.parentNode = parentNode;
+    this.turn = turn;
     this.currentDepth = parentNode.currentDepth + 1;
+    this.isGameOver = isGameOver;
+
   }
 
-  public void setChildren(Board board, int depth)
+  // Lol India/China are o metoda de genu.
+  public void generateChildren(Board board, int depth)
   {
     // Force to set children to childrenless nodes
   }
@@ -66,5 +76,13 @@ public class Node
   public Node getParent()
   {
     return this.parentNode;
+  }
+
+
+  // When one of the agents can't make a move, because thats the way Kalah returns
+  // isGameOver.
+  public boolean isGameOver()
+  {
+    return this.isGameOver;
   }
 }
