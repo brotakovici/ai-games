@@ -8,7 +8,7 @@ public class Node
   private Board board;
   private Node parentNode;
   private ArrayList<Node> children;
-  private int moveMade;
+  private Move moveMade;
   private boolean isGameOver;
   private boolean isWon;
 
@@ -28,7 +28,7 @@ public class Node
       {
         Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
 
-        Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, index, maKalahInGuraLor.gameOver());
+        Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
         children.add(child);
       }
     }
@@ -43,24 +43,24 @@ public class Node
     this.parentNode = null;
     this.currentDepth = 0;
     this.turn = turn;
-    this.moveMade = -1;
+    this.moveMade = null;
     //this.children = createChildren(this.board, depth);
   }
 
-  public Node(Board board, Node parentNode, Side turn, int moveMade, boolean isGameOver)
+  public Node(Board board, Node parentNode, Side turn, Move moveMade, boolean isGameOver)
   {
     this.board = board;
     this.parentNode = parentNode;
     this.turn = turn;
     this.currentDepth = parentNode.currentDepth + 1;
     this.isGameOver = isGameOver;
-
+    this.moveMade = moveMade;
   }
 
   // Lol India/China are o metoda de genu.
   public void generateChildren(Board board, int depth)
   {
-    // Force to set children to childrenless nodes
+    // Force to set children to childrenless nodes up to a depth
   }
 
   public ArrayList<Node> getChildren()
