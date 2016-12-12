@@ -19,7 +19,12 @@ public class Node
     for(int index = 1; index <= maxPossibleMoves; index++)
     {
       Board tempBoard = new Board(board);
+      Move attemptedMove = new Move(index, this.turn);
       // Make move, set currentDepth + 1, set turn, set parentNode, move made to get there
+      /*
+      (simulatedBoard, getsTurn) = this.simulateMove(board, i)
+      create node
+      */
     }
 
     return children;
