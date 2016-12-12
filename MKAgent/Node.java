@@ -78,6 +78,12 @@ public class Node
     return this.parentNode;
   }
 
+  // Checks if side has half + 1 seeds in well
+  // NEEDS IMPLEMENTATION
+  public boolean gameWon(Side side)
+  {
+    return false;
+  }
 
   // When one of the agents can't make a move, because thats the way Kalah returns
   // isGameOver.
