@@ -12,25 +12,25 @@ public class Node
   private Move moveMade;
   private boolean isGameOver;
   private boolean isWon;
-  private in gain;
+  private int gain;
 
-  private ArrayList<Node> createChildren(Node node)
+  private ArrayList<Node> createChildren()
   {
     // Aici e o nebunie
     ArrayList<Node> children = new ArrayList<Node>();
-    int maxPossibleMoves = node.getBoard().getNoOfHoles();
+    int maxPossibleMoves = this.getBoard().getNoOfHoles();
 
     for(int index = 1; index <= maxPossibleMoves; index++)
     {
-      Board tempBoard = new Board(node.getBoard());
+      Board tempBoard = new Board(this.getBoard());
       Move attemptedMove = new Move(this.turn, index);
       Kalah maKalahInGuraLor = new Kalah(tempBoard);
 
-      if(maKalahInGuraLor.isLegalMove(attemptedMove))
+      if(!maKalahInGuraLor.gameOver() && maKalahInGuraLor.isLegalMove(attemptedMove))
       {
         Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
 
-        Node child = new Node(maKalahInGuraLor.getBoard(), node, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
+        Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
 
     	  //child.setGain(child.getBoard.getSeeds(child.getBotSide(), 0) - child.getBoard.getSeeds(child.getBotSide().opposite(), 0));
 
@@ -64,38 +64,34 @@ public class Node
     this.isGameOver = isGameOver;
     this.moveMade = moveMade;
     this.gain = 0;
-    this.botSide = this.getParent().getBotSide;
+    this.botSide = this.getParent().getBotSide();
   }
 
   // Lol India/China are o metoda de genu.
   public void generateChildren(int depth)
   {
-    while(depth)
+
+    int parentDepth = this.currentDepth;
+    int targetDepth = parentDepth + depth;
+    ArrayList<Node> nodes = new ArrayList<Node>();
+    nodes.add(this);
+    ArrayList<Node> nextLevel = new ArrayList<Node>();
+
+    for(int currDepth = parentDepth; currDepth < targetDepth; currDepth++)
     {
-      this.createChildren(this);
-      
-      depth --;
-
-      if (depth)
+      nextLevel = new ArrayList<Node>();
+      for(Node currentNode : nodes)
       {
-	int worstGain = 1000;
-	Move worstParentMoveMade = new Move();
-
-        //for each child in children
-          if (worstGain > child.getGain())
-          {
-	    worstGain = child.getGain();
-            worstParentMoveMade = chil.getParent().getMoveMade();
-          }
-
-        //Nu prea stiu cum sa o definesc deci nu e definita lista asta inca
-        worstMoves.add(worstParentMoveMade);
-	worstGains.add(worstGain);
+        ArrayList<Node> children = currentNode.createChildren();
+        currentNode.setChildren(children);
+        nextLevel.addAll(children);
       }
+      nodes = nextLevel;
+
     }
-    // Force to set children to childrenless nodes up to a depth
   }
 
+  /*
   public Move getMoveToMake()
   {
     Move move = new Move();
@@ -106,10 +102,16 @@ public class Node
     }
     return move;
   }
+  */
 
   public Move getMoveMade()
   {
     return this.moveMade;
+  }
+
+  public void setChildren(ArrayList<Node> children)
+  {
+    this.children = children;
   }
 
   public ArrayList<Node> getChildren()
@@ -122,7 +124,7 @@ public class Node
     this.botSide = side;
   }
 
-  public Side getBotSide(Side side)
+  public Side getBotSide()
   {
     return this.botSide;
   }
