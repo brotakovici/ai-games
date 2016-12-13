@@ -14,15 +14,15 @@ public class Node
   private boolean isWon;
   private in gain;
 
-  private ArrayList<Node> createChildren(Board board)
+  private ArrayList<Node> createChildren(Node node)
   {
     // Aici e o nebunie
     ArrayList<Node> children = new ArrayList<Node>();
-    int maxPossibleMoves = board.getNoOfHoles();
+    int maxPossibleMoves = node.getBoard().getNoOfHoles();
 
     for(int index = 1; index <= maxPossibleMoves; index++)
     {
-      Board tempBoard = new Board(board);
+      Board tempBoard = new Board(node.getBoard());
       Move attemptedMove = new Move(this.turn, index);
       Kalah maKalahInGuraLor = new Kalah(tempBoard);
 
@@ -30,16 +30,12 @@ public class Node
       {
         Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
 
-        Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
+        Node child = new Node(maKalahInGuraLor.getBoard(), node, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
 
-	//Pe aici trebuie discutat putin. C U nxt M33ting.
-	if (child.getTurn() == this.getTurn)
-	  createChildren(child.getBoard());
-	else
-	{
-	  child.setGain(child.getBoard.getSeeds(child.getBotSide(), 0) - child.getBoard.getSeeds(child.getBotSide().opposite(), 0));
-          children.add(child);
-        }
+    	  //child.setGain(child.getBoard.getSeeds(child.getBotSide(), 0) - child.getBoard.getSeeds(child.getBotSide().opposite(), 0));
+
+        children.add(child);
+
       }
     }
 
@@ -68,17 +64,18 @@ public class Node
     this.isGameOver = isGameOver;
     this.moveMade = moveMade;
     this.gain = 0;
-    this.botSide = this.getParent().getBotSide; 
+    this.botSide = this.getParent().getBotSide;
   }
 
   // Lol India/China are o metoda de genu.
-  public void generateChildren(Board board, int depth)
+  public void generateChildren(int depth)
   {
     while(depth)
     {
-      this.createChildren(this.getBoard());
+      this.createChildren(this);
+      
       depth --;
-     
+
       if (depth)
       {
 	int worstGain = 1000;
@@ -90,7 +87,7 @@ public class Node
 	    worstGain = child.getGain();
             worstParentMoveMade = chil.getParent().getMoveMade();
           }
-        
+
         //Nu prea stiu cum sa o definesc deci nu e definita lista asta inca
         worstMoves.add(worstParentMoveMade);
 	worstGains.add(worstGain);
@@ -108,7 +105,7 @@ public class Node
       //gaseste maximul de la worst gains si baga  worst moveul care ii corespunde in PIZDA MA-SII... nu. in move.
     }
     return move;
-  }  
+  }
 
   public Move getMoveMade()
   {
@@ -134,7 +131,7 @@ public class Node
   {
     this.gain = gain;
   }
-  
+
   public int getGain()
   {
     return this.gain;
