@@ -92,22 +92,28 @@ public class Node
         nextLevel.addAll(children);
       }
       nodes = nextLevel;
-
     }
-  }
-
-  /*
-  public Move getMoveToMake()
-  {
-    Move move = new Move();
-    //for moves in worstMoves
-    //CREIERUL S-A OPRIT
+    
+    for(Node currentNode: nodes)
     {
-      //gaseste maximul de la worst gains si baga  worst moveul care ii corespunde in PIZDA MA-SII... nu. in move.
+      int benefit;
+      benefit = currentNode.getBoard().getSeeds(currentNode.getBotSide(), 0) - currentNode.getBoard().getSeeds(currentNode.getBotSide().opposite(), 0);
+      currentNode.setGain(benefit);
+      currentNode.updateTreeGains();
     }
-    return move;
+
+
   }
-  */
+
+  //Method for updating the gains on each node
+  public void updateTreeGains()
+  {
+    if(this.getParent() != NULL)
+    {
+      this.getParent().setGain(this.getParent().getGain() + this.getGain();
+      this.getParent().updateTreeGains();
+    }
+  }
 
   public Move getMoveMade()
   {
