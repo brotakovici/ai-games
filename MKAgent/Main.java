@@ -6,77 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
- * Method that handles the seed distribution once a move is simulated.
- */
-// public void distSeeds (int seedNum, Side side, int holeNum, int noOfHoles, Board board, Side playerSide, Node currentNode)
-// {
-//         int index = holeNum + 1;
-// 	board.setSeeds(side, holeNum, 0);
-//         while (seedNum != 0) && (index <= noOfHoles)
-//         {
-//                 seedNum--;
-//                 board.setSeeds(side, index, board.getSeeds(side, index) + 1);
-//                 index++;
-//         }//while
-
-//         if (seeds != 0)
-//         {
-//                 if (side == playerSide)
-// 		{
-// 			if (playerSide == mySide)
-// 			{
-// 				currentNode.gain++;
-// 				seedNum--;
-// 			}//if
-			
-// 			else
-// 			{
-// 				currentNode.gain--;
-// 				seedNum--;
-// 			}//else
-// 		}
-			
-//                 distSeeds(seedNum, side.opposite(), 0, noOfHoles, board, playerSide, currentNode);
-//         }//if
-
-//         else
-// 	{
-//                 if (side == playerSide) && (board.getSeeds(side, index) == 1)
-//                 {
-// 			if (playerSide == mySide)
-// 				currentNode.gain += board.getSeedsOp(side, index);
-// 			else
-// 				currentNode.gain -= board.getSeedsOp(side, index);
-				
-//                         board.setSeedsOp(side, index, 0);
-//                 }//if
-		
-// 		boolean noEnd = false;
-
-// 		for(int i = 1; i<= noOfHoles; i++)
-// 		{
-// 			if (board.getSeeds(playerSide, i) != 0)
-// 			{
-// 				noEnd = true;
-// 				i = noOfHoles + 1;
-// 			}//if
-// 		}//for
-
-// 		if (!noEnd)
-// 			for(int i = 1; i<= noOfHoles; i++)
-// 			{
-// 				if (playerSide == mySide)
-// 					currentNode.gain -= board.getSeeds(playerSide.opposite, i);
-// 				else
-// 					currentNode.gain += board.getSeeds(playerSide.opposite, i);
-				
-// 				board.setSeeds(playerSide.opposite, i, 0);
-// 			}//for
-// 	}//else	
-
-// }//distSeeds
-
-/**
  * The main application class. It also provides methods for communication
  * with the game engine.
  */
@@ -119,18 +48,6 @@ public class Main
 		return message.toString();
     }
 
-    // public static int minValue(int[] array){
-    // 	int min = 40, key = -1;
-
-    // 	for (int j = 0; j < array.length; j++){
-    // 		if (array[j] < min && array[j] != 0){
-    // 			min = array[j];
-    // 			key = j + 1;
-    // 		}
-    // 	}
-    // 	return key;
-    // }
-
 	/**
 	 * The main method, invoked when the program is started.
 	 * @param args Command line arguments.
@@ -146,9 +63,6 @@ public class Main
 			Side mySide = north; 
 
 			Board b = new Board(7,7);
-
-			// int[] seedsLeft = new int[b.getNoOfHoles()];
-			// int moveSeed = 1;
 
 			while (true){
 				System.err.println();
@@ -185,18 +99,6 @@ public class Main
 								msj = Protocol.createSwapMsg();
 								sendMsg(msj);
 							} // if
-							
-							// for (int i = 0; i < b.getNoOfHoles(); i++){
-							// 	seedsLeft[i] = b.getSeeds(mySide, i + 1);
-							// } // for
-							 
-							// moveSeed = minValue(seedsLeft);
-
-							// if (moveSeed != -1){
-							// 	msj = Protocol.createMoveMsg(moveSeed);
-							// 	sendMsg(msj);
-							// }
-
 
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);

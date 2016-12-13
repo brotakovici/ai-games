@@ -14,6 +14,11 @@ public class Node
   private boolean isWon;
   private int gain;
 
+  // private static final int NORTH_ROW = 0;
+  // private static final int SOUTH_ROW = 1;
+  // private int[][] b;
+  // private final noOfHoles = b.getNoOfHoles();
+
   private ArrayList<Node> createChildren()
   {
     // Aici e o nebunie
