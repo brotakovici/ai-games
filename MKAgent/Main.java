@@ -119,6 +119,18 @@ public class Main
 		return message.toString();
     }
 
+    // public static int minValue(int[] array){
+    // 	int min = 40, key = -1;
+
+    // 	for (int j = 0; j < array.length; j++){
+    // 		if (array[j] < min && array[j] != 0){
+    // 			min = array[j];
+    // 			key = j + 1;
+    // 		}
+    // 	}
+    // 	return key;
+    // }
+
 	/**
 	 * The main method, invoked when the program is started.
 	 * @param args Command line arguments.
@@ -131,9 +143,13 @@ public class Main
 
 			Side north = Side.values()[0];
 			Side south = Side.values()[1];
-			Side mySide = north;
+			Side mySide = north; 
 
 			Board b = new Board(7,7);
+
+			// int[] seedsLeft = new int[b.getNoOfHoles()];
+			// int moveSeed = 1;
+
 			while (true){
 				System.err.println();
 				s = recvMsg();
@@ -170,6 +186,17 @@ public class Main
 								sendMsg(msj);
 							} // if
 							
+							// for (int i = 0; i < b.getNoOfHoles(); i++){
+							// 	seedsLeft[i] = b.getSeeds(mySide, i + 1);
+							// } // for
+							 
+							// moveSeed = minValue(seedsLeft);
+
+							// if (moveSeed != -1){
+							// 	msj = Protocol.createMoveMsg(moveSeed);
+							// 	sendMsg(msj);
+							// }
+
 
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
