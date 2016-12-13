@@ -11,7 +11,7 @@ public class TestTree {
 
 		Side north = Side.values()[0];
 		Side south = Side.values()[1];
-		Side mySide = north; 
+		Side mySide = south; 
 
 		Node tree = new Node(b, mySide);
 

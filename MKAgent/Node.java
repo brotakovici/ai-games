@@ -14,11 +14,6 @@ public class Node
   private boolean isWon;
   private int gain;
 
-  // private static final int NORTH_ROW = 0;
-  // private static final int SOUTH_ROW = 1;
-  // private int[][] b;
-  // private final noOfHoles = b.getNoOfHoles();
-
   private ArrayList<Node> createChildren()
   {
     // Aici e o nebunie
@@ -96,21 +91,21 @@ public class Node
     
     for(Node currentNode: nodes)
     {
+      System.out.print(currentNode);
       int benefit;
-      benefit = currentNode.getBoard().getSeeds(currentNode.getBotSide(), 0) - currentNode.getBoard().getSeeds(currentNode.getBotSide().opposite(), 0);
+      benefit = currentNode.getBoard().getSeedsInStore(currentNode.getBotSide()) - currentNode.getBoard().getSeedsInStore(currentNode.getBotSide().opposite());
       currentNode.setGain(benefit);
+      System.out.println(currentNode.getGain());
       currentNode.updateTreeGains();
     }
-
-
   }
 
   //Method for updating the gains on each node
   public void updateTreeGains()
   {
-    if(this.getParent() != NULL)
+    if(this.getParent() != null)
     {
-      this.getParent().setGain(this.getParent().getGain() + this.getGain();
+      this.getParent().setGain(this.getParent().getGain() + this.getGain());
       this.getParent().updateTreeGains();
     }
   }
@@ -177,5 +172,15 @@ public class Node
   public boolean isGameOver()
   {
     return this.isGameOver;
+  }
+
+  @Override
+  public String toString()
+  {
+    StringBuilder treeString = new StringBuilder();
+
+    treeString.append(this.getBoard().toString() + '\n');
+
+    return treeString.toString();
   }
 }
