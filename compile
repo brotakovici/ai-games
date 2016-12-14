@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm MKAgent/*.class
+javac MKAgent/*
+java -jar ManKalah.jar "nc localhost 12345" "java MKAgent/Main"     
