@@ -56,7 +56,7 @@ public class Main
 	{
     	try {
 			String s, msj;
-			boolean first = true;
+			boolean first = true, swap = false;
 
 			Side north = Side.values()[0];
 			Side south = Side.values()[1];
@@ -75,7 +75,7 @@ public class Main
 							System.err.println("A start.");
 							first = Protocol.interpretStartMsg(s);
 
-							// @SuperMove
+							// SuperMove
 							if (first){
 								mySide = south;
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
@@ -89,12 +89,13 @@ public class Main
 
 							// If opponent swaps
 							if (r.move == -1){
+                                                                                                swap = true;
 								mySide = north;
 							}
 
-							// @SwapMove
-							if (!first && r.move == b.getNoOfHoles()) {
-								first = true;
+							// SwapMove
+							if (!first && r.move == b.getNoOfHoles() && !swap) {
+								swap = true;
 								mySide = south;
 								msj = Protocol.createSwapMsg();
 								sendMsg(msj);

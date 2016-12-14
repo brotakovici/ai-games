@@ -12,7 +12,7 @@ public class Node
   private Move moveMade;
   private boolean isGameOver;
   private boolean isWon;
-  private int gain;
+  private float gain;
 
   private ArrayList<Node> createChildren()
   {
@@ -89,18 +89,23 @@ public class Node
       nodes = nextLevel;
     }
 
+    int[][] pozNegCount = new int[3][depth];
+    for(int i = 1; i <= 3; i++)
+      for(int j = 1; j <= depth; j++)
+        pozNegCount[i][j] = 0;
+    
+
     for(Node currentNode: nodes)
     {
-      System.out.print(currentNode);
       int benefit;
       benefit = currentNode.getBoard().getSeedsInStore(currentNode.getBotSide()) - currentNode.getBoard().getSeedsInStore(currentNode.getBotSide().opposite());
       currentNode.setGain(benefit);
-      System.out.println(currentNode.getGain());
-      currentNode.updateTreeGains();
+
+      pozNegCount = currentNode.updateTreeGains(pozNegCount, depth);
     }
   }
 
-  public void generateLevel()
+  public void generateLevel(int depth)
   {
     ArrayList<Node> currentLevel = new ArrayList<Node>();
     currentLevel.add(this);
@@ -113,30 +118,117 @@ public class Node
       previousLevel = currentLevel;
       for(Node node : currentLevel)
       {
+        node.setGain(0);
         nextLevel.addAll(node.getChildren());
       }
       currentLevel = nextLevel;
     }
 
+    
     for(Node node : previousLevel)
     {
       node.createChildren();
     }
-  }
 
-  //Method for updating the gains on each node
-  public void updateTreeGains()
-  {
-    if(this.getParent() != null)
+
+    int[][] pozNegCount = new int[3][depth];
+    for(int i = 1; i <= 3; i++)
+      for(int j = 1; j <= depth; j++)
+        pozNegCount[i][j] = 0;
+
+
+    for(Node node : node.getChildren())
     {
-      this.getParent().setGain(this.getParent().getGain() + this.getGain());
-      this.getParent().updateTreeGains();
+      int benefit;
+      benefit = node.getBoard().getSeedsInStore(node.getBotSide()) - currentNode.getBoard().getSeedsInStore(node.getBotSide().opposite());
+      currentNode.setGain(benefit);
+      pozNegCount = node.updateTreeGains(pozNegCount, depth);
+
     }
   }
 
-  public Move getMoveMade()
+  //Method for updating the gains on each node
+  public int[][] updateTreeGains(int[][] a, int depth)
+  {
+    if(this.getParent() != null)
+    {
+      float gain;
+      gain = this.getGain();
+      
+      a[3][depth]++;
+      if (gain > 0)
+        a[1][depth]++;
+      else if (gain < 0)
+        a[2][depth]++;
+
+      this.getParent().setGain(this.getParent().getGain() + gain;
+      int noOfMoves = this.getParent().getChildren().size();
+
+      if (a[3][depth] == noOfMoves)
+      {
+
+        float g;
+        g = this.getParent().getGain();
+        if (g > 0)
+        {
+          if (a[2][depth] == 0)
+            a[2][depth]++;
+
+          this.getParent().setGain(g * (a[1][depth]/a[2][depth]));
+        }  
+          
+        else if (g < 0)
+        {
+
+          if (a[1][depth] == 0)
+            a[1][depth]++;
+
+          this.getParent().setGain(g * (a[2][depth]/a[1][depth]));
+        }
+        
+        this.getParent().getParent().setGain(this.getParent().getParent().getGain() + this.getParent().getGain());
+
+        if (this.getParent().getGain() > 0)
+          a[1][depth-1]++;
+        else if (this.getParent().getGain() < 0)
+          a[2][depth-1]++;
+
+        a[3][depth-1]++;
+
+        a[1][depth] = 0;
+        a[2][depth] = 0;
+        a[3][depth] = 0;
+
+        if (this.getParent().getParent() != null)
+        {
+          if (a[3][depth-1] == this.getParent().getParent().getChildren().size())
+            a = this.getParent().updateTreeGains(a, depth-1);
+        }    
+      }
+    }
+    
+      return a;
+  }
+
+  public Move getMove()
   {
     return this.moveMade;
+  }
+
+  public Move getMoveToMake()
+  {
+    float maxGain = -1000;
+    Move move;
+
+    for(Node currentNode : this.getChildren())
+    {
+      if(currentNode.getGain() >= maxGain)
+      {
+        maxGain = currentNode.getGain();
+        move = currentNode.getMove();
+      }
+    }  
+    return move;
   }
 
   public void setChildren(ArrayList<Node> children)
@@ -159,7 +251,7 @@ public class Node
     return this.botSide;
   }
 
-  public void setGain(int gain)
+  public void setGain(float gain)
   {
     this.gain = gain;
   }
