@@ -63,6 +63,10 @@ public class Main
 			Side mySide = north; 
 
 			Board b = new Board(7,7);
+                                    Kalah kal = new Kalah(b);
+                                    Move move = null;
+
+                                    Node rootNode = null;
 
 			while (true){
 				System.err.println();
@@ -80,6 +84,9 @@ public class Main
 								mySide = south;
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
+                                                                                                move = new Move(south, b.getNoOfHoles());
+                                                                                                kal.makeMove(b, move);
+                                                                                                b = kal.getBoard();
 							} // if
 
 							System.err.println("Starting player? " + first);
@@ -100,6 +107,24 @@ public class Main
 								msj = Protocol.createSwapMsg();
 								sendMsg(msj);
 							} // if
+
+                                                                                    // Opponent's move
+                                                                                    if (!first && r.move != b.getNoOfHoles() && !swap){
+                                                                                        mySide = north;
+                                                                                        move = new Move(south, r.move);
+                                                                                        kal.makeMove(b, move);
+                                                                                        b = kal.getBoard();
+                                                                                    } // if
+
+                                                                                    if (rootNode == null && first) 
+                                                                                        rootNode = new Node(b, north);
+                                                                                    else if (rootNode == null && !first && !swap)
+                                                                                        rootNode = new Node(b, south);
+                                                                                    else if (rootNode == null && !first && swap)
+                                                                                        rootNode = new Node(b, north);
+
+                                                                                    if (rootNode.getChildren.isEmpty())
+                                                                                        rootNode.generateChildren(4);
 
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
