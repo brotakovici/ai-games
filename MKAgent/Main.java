@@ -117,14 +117,16 @@ public class Main
                                                                                     } // if
 
                                                                                     if (rootNode == null && first) 
-                                                                                        rootNode = new Node(b, north);
+                                                                                        rootNode = new Node(b, north, mySide);
                                                                                     else if (rootNode == null && !first && !swap)
-                                                                                        rootNode = new Node(b, south);
+                                                                                        rootNode = new Node(b, south, mySide);
                                                                                     else if (rootNode == null && !first && swap)
-                                                                                        rootNode = new Node(b, north);
+                                                                                        rootNode = new Node(b, north, mySide);
 
                                                                                     if (rootNode.getChildren.isEmpty())
                                                                                         rootNode.generateChildren(4);
+
+                                                                                    if ()
 
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
