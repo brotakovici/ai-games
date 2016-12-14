@@ -286,7 +286,11 @@ public class Node
   // NEEDS IMPLEMENTATION
   public boolean gameWon(Side side)
   {
-    return false;
+    int seedsInStore = this.board.getSeedsInStore(side);
+    if(seedsInStore > 49)
+      return true;
+    else
+      return false;
   }
 
   // When one of the agents can't make a move, because thats the way Kalah returns
