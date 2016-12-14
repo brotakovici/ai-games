@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 
 public class TestTree {
 	public static void main(String[] args) {
@@ -16,5 +17,18 @@ public class TestTree {
 		Node tree = new Node(b, mySide, south);
 
 		tree.generateChildren(4);
+
+		ArrayList<Node> level = new ArrayList<Node>();
+		level.add(tree);
+		while(!level.isEmpty())
+		{
+			ArrayList<Node> nextLevel = new ArrayList<Node>();
+			for(Node node : level)
+			{
+				System.out.println(node.printNode());
+				nextLevel.addAll(node.getChildren());
+			}
+			level = nextLevel;
+		}
 	}
 }
