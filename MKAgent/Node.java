@@ -210,7 +210,7 @@ public class Node
       return a;
   }
 
-  public Move getMove()
+  public Move getMoveMade()
   {
     return this.moveMade;
   }
