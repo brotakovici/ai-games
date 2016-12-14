@@ -15,6 +15,6 @@ public class TestTree {
 
 		Node tree = new Node(b, mySide, south);
 
-		tree.generateChildren(2);
+		tree.generateChildren(4);
 	}
 }

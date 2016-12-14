@@ -52,7 +52,7 @@ public class Node
     this.moveMade = null;
     this.gain = 0;
     this.botSide = ourSide;
-    //this.children = createChildren(this.board, depth);
+    this.children = new ArrayList<Node>();
   }
 
   public Node(Board board, Node parentNode, Side turn, Move moveMade, boolean isGameOver)
@@ -65,6 +65,11 @@ public class Node
     this.moveMade = moveMade;
     this.gain = 0;
     this.botSide = this.getParent().getBotSide();
+  }
+
+  public int getDepth()
+  {
+      return this.currentDepth;
   }
 
   // Lol India/China are o metoda de genu.
@@ -89,7 +94,7 @@ public class Node
       nodes = nextLevel;
     }
 
-    int[][] pozNegCount = new int[3][depth];
+    int[][] pozNegCount = new int[4][depth + 1];
     for(int i = 1; i <= 3; i++)
       for(int j = 1; j <= depth; j++)
         pozNegCount[i][j] = 0;
@@ -131,7 +136,7 @@ public class Node
     }
 
 
-    int[][] pozNegCount = new int[3][depth];
+    int[][] pozNegCount = new int[4][depth + 1];
     for(int i = 1; i <= 3; i++)
       for(int j = 1; j <= depth; j++)
         pozNegCount[i][j] = 0;

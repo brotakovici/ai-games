@@ -98,7 +98,8 @@ public class Main
 							first = Protocol.interpretStartMsg(s);
 
 							// SuperMove
-							if (first){
+							if (first && !swap){
+                                                                                                swap = true;
 								mySide = south;
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
@@ -112,29 +113,27 @@ public class Main
 						case STATE: 
 							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
 
-							// If opponent swaps
-							if (r.move == -1){
-                                                                                                swap = true;
-								mySide = north;
-							}
+							// // If opponent swaps
+							// if (r.move == -1){
+       //                                                                                          swap = true;
+							// 	mySide = north;
+							// }
 
-							// SwapMove
-							if (!first && r.move == b.getNoOfHoles() && !swap) {
-								swap = true;
-								mySide = south;
-								msj = Protocol.createSwapMsg();
-								sendMsg(msj);
-							} // if
+							// // SwapMove
+							// if (!first && r.move == b.getNoOfHoles() && !swap) {
+							// 	swap = true;
+							// 	mySide = south;
+							// 	msj = Protocol.createSwapMsg();
+							// 	sendMsg(msj);
+							// } // if
 
                                                                                     // Opponent's move
-                                                                                    if (!first && r.move != b.getNoOfHoles() && !swap){
+                                                                                    if (!first){
                                                                                         mySide = north;
                                                                                         move = new Move(south, r.move);
                                                                                         kal.makeMove(b, move);
                                                                                         b = kal.getBoard();
                                                                                     } // if
-
-                                                                                    System.err.print("dsa");
 
                                                                                     if (rootNode == null && first) 
                                                                                         rootNode = new Node(b, north, mySide);
@@ -151,8 +150,8 @@ public class Main
                                                                                             msj = Protocol.createMoveMsg(pizdaMasii.getHole());
                                                                                             sendMsg(msj);
                                                                                             rootNode = updateNode(pizdaMasii.getHole(), rootNode);
-                                                                                        } else if(!r.again) {   
-                                                                                            rootNode = updateNode(r.move, rootNode);
+                                                                                        } else if(!r.again) { 
+                                                                                        //     rootNode = updateNode(r.move, rootNode);
                                                                                         }
                                                                                     }
                                                                                     
