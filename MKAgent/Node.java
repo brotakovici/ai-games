@@ -42,7 +42,7 @@ public class Node
     return children;
   }
 
-  public Node(Board board, Side turn)
+  public Node(Board board, Side turn, Side ourSide)
   {
     this.currentDepth = 0;
     this.board = board;
@@ -51,7 +51,7 @@ public class Node
     this.turn = turn;
     this.moveMade = null;
     this.gain = 0;
-    this.botSide = turn;
+    this.botSide = ourSide;
     //this.children = createChildren(this.board, depth);
   }
 
@@ -93,7 +93,7 @@ public class Node
     for(int i = 1; i <= 3; i++)
       for(int j = 1; j <= depth; j++)
         pozNegCount[i][j] = 0;
-    
+
 
     for(Node currentNode: nodes)
     {
@@ -124,7 +124,7 @@ public class Node
       currentLevel = nextLevel;
     }
 
-    
+
     for(Node node : previousLevel)
     {
       node.createChildren();
@@ -154,7 +154,7 @@ public class Node
     {
       float gain;
       gain = this.getGain();
-      
+
       a[3][depth]++;
       if (gain > 0)
         a[1][depth]++;
@@ -175,8 +175,8 @@ public class Node
             a[2][depth]++;
 
           this.getParent().setGain(g * (a[1][depth]/a[2][depth]));
-        }  
-          
+        }
+
         else if (g < 0)
         {
 
@@ -185,7 +185,7 @@ public class Node
 
           this.getParent().setGain(g * (a[2][depth]/a[1][depth]));
         }
-        
+
         this.getParent().getParent().setGain(this.getParent().getParent().getGain() + this.getParent().getGain());
 
         if (this.getParent().getGain() > 0)
@@ -203,10 +203,10 @@ public class Node
         {
           if (a[3][depth-1] == this.getParent().getParent().getChildren().size())
             a = this.getParent().updateTreeGains(a, depth-1);
-        }    
+        }
       }
     }
-    
+
       return a;
   }
 
@@ -227,7 +227,7 @@ public class Node
         maxGain = currentNode.getGain();
         move = currentNode.getMove();
       }
-    }  
+    }
     return move;
   }
 
