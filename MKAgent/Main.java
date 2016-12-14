@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 
 /**
  * The main application class. It also provides methods for communication
@@ -11,7 +12,7 @@ import java.io.Reader;
  */
 public class Main
 {
-    private final int DEPTH = 4;
+    private static final int DEPTH = 4;
     /**
      * Input from the game engine.
      */
@@ -140,11 +141,11 @@ public class Main
                                                                                     else if (rootNode == null && !first && swap)
                                                                                         rootNode = new Node(b, north, mySide);
 
-                                                                                    if (rootNode.getChildren.isEmpty())
+                                                                                    if (rootNode.getChildren().isEmpty())
                                                                                         rootNode.generateChildren(DEPTH);
                                                                                     if (!r.end){
                                                                                         if (r.again){
-                                                                                            Move pizdaMasii = rootNode.moveToMake();
+                                                                                            Move pizdaMasii = rootNode.getMoveToMake();
                                                                                             msj = Protocol.createMoveMsg(pizdaMasii.getHole());
                                                                                             sendMsg(msj);
                                                                                             rootNode = updateNode(pizdaMasii.getHole(), rootNode);
