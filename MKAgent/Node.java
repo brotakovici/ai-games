@@ -115,6 +115,7 @@ public class Node
       {
         nextLevel.addAll(node.getChildren());
       }
+      currentLevel = nextLevel;
     }
 
     for(Node node : previousLevel)
