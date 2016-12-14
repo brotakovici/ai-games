@@ -300,8 +300,13 @@ public class Node
   {
     StringBuilder treeString = new StringBuilder();
     treeString.append("It's " + this.turn + " to make a move.\n");
-    treeString.append("Bot's side is: " + this.turn + ".\n");
-    treeString.append("Current level is:" + this.currentDepth + ".\n");
+    treeString.append("Bot's side is: " + this.botSide + ".\n");
+    if(this.moveMade != null)
+    {
+      treeString.append("Previous turn was " + this.moveMade.getSide() + ".\n");
+      treeString.append("Hole selected was " + this.moveMade.getHole() + ".\n");
+    }
+    treeString.append("Current level is: " + this.currentDepth + " .\n");
     treeString.append("This node has " + this.children.size() + " children.\n");
     treeString.append("Current node's projected gain is "+ this.gain + '\n');
     treeString.append(this.getBoard().toString() + '\n');
