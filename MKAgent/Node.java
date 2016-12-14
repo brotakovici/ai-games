@@ -137,11 +137,11 @@ public class Node
         pozNegCount[i][j] = 0;
 
 
-    for(Node node : node.getChildren())
+    for(Node node : this.getChildren())
     {
       int benefit;
-      benefit = node.getBoard().getSeedsInStore(node.getBotSide()) - currentNode.getBoard().getSeedsInStore(node.getBotSide().opposite());
-      currentNode.setGain(benefit);
+      benefit = node.getBoard().getSeedsInStore(node.getBotSide()) - node.getBoard().getSeedsInStore(node.getBotSide().opposite());
+      node.setGain(benefit);
       pozNegCount = node.updateTreeGains(pozNegCount, depth);
 
     }
@@ -161,7 +161,7 @@ public class Node
       else if (gain < 0)
         a[2][depth]++;
 
-      this.getParent().setGain(this.getParent().getGain() + gain;
+      this.getParent().setGain(this.getParent().getGain() + gain);
       int noOfMoves = this.getParent().getChildren().size();
 
       if (a[3][depth] == noOfMoves)
@@ -218,14 +218,14 @@ public class Node
   public Move getMoveToMake()
   {
     float maxGain = -1000;
-    Move move;
+    Move move = null;
 
     for(Node currentNode : this.getChildren())
     {
       if(currentNode.getGain() >= maxGain)
       {
         maxGain = currentNode.getGain();
-        move = currentNode.getMove();
+        move = currentNode.getMoveMade();
       }
     }
     return move;
@@ -256,7 +256,7 @@ public class Node
     this.gain = gain;
   }
 
-  public int getGain()
+  public float getGain()
   {
     return this.gain;
   }

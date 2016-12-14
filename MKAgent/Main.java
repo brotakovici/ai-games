@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 
 /**
  * The main application class. It also provides methods for communication
@@ -11,6 +12,7 @@ import java.io.Reader;
  */
 public class Main
 {
+    private static final int DEPTH = 4;
     /**
      * Input from the game engine.
      */
@@ -25,6 +27,22 @@ public class Main
     	System.out.print(msg);
     	System.out.flush();
     }
+
+    public static Node updateNode (int move, Node rootNode){
+        ArrayList<Node> possibleNextNodes = rootNode.getChildren();
+        Node nextNode = null;
+        for(Node node : possibleNextNodes){
+            if(node.getMoveMade().getHole() == move){
+                nextNode = node;
+                break;
+            }
+        }
+        rootNode = nextNode;
+        rootNode.generateLevel(DEPTH);
+
+        return rootNode;
+
+    } // updateNode
 
     /**
      * Receives a message from the game engine. Messages are terminated by
@@ -123,11 +141,19 @@ public class Main
                                                                                     else if (rootNode == null && !first && swap)
                                                                                         rootNode = new Node(b, north, mySide);
 
-                                                                                    if (rootNode.getChildren.isEmpty())
-                                                                                        rootNode.generateChildren(4);
-
-                                                                                    if ()
-
+                                                                                    if (rootNode.getChildren().isEmpty())
+                                                                                        rootNode.generateChildren(DEPTH);
+                                                                                    if (!r.end){
+                                                                                        if (r.again){
+                                                                                            Move pizdaMasii = rootNode.getMoveToMake();
+                                                                                            msj = Protocol.createMoveMsg(pizdaMasii.getHole());
+                                                                                            sendMsg(msj);
+                                                                                            rootNode = updateNode(pizdaMasii.getHole(), rootNode);
+                                                                                        } else if(!r.again) {   
+                                                                                            rootNode = updateNode(r.move, rootNode);
+                                                                                        }
+                                                                                    }
+                                                                                    
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
 							System.err.println("Is the game over? " + r.end);
