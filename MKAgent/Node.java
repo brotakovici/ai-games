@@ -313,6 +313,12 @@ public class Node
     treeString.append("Current level is: " + this.currentDepth + " .\n");
     treeString.append("This node has " + this.children.size() + " children.\n");
     treeString.append("Current node's projected gain is "+ this.gain + '\n');
+    if(this.getParent() != null)
+    {
+      treeString.append("Parent: \n");
+      treeString.append(this.getParent().getBoard().toString() + '\n');
+      treeString.append("---------------------------------------------------------\n");
+    }
     treeString.append(this.getBoard().toString() + '\n');
 
     return treeString.toString();
