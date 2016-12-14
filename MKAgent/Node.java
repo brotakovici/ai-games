@@ -65,6 +65,7 @@ public class Node
     this.moveMade = moveMade;
     this.gain = 0;
     this.botSide = this.getParent().getBotSide();
+    this.children = new ArrayList<Node>();
   }
 
   public int getDepth()
