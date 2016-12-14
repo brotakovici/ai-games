@@ -134,6 +134,8 @@ public class Main
                                                                                         b = kal.getBoard();
                                                                                     } // if
 
+                                                                                    System.err.print("dsa");
+
                                                                                     if (rootNode == null && first) 
                                                                                         rootNode = new Node(b, north, mySide);
                                                                                     else if (rootNode == null && !first && !swap)
