@@ -88,7 +88,7 @@ public class Node
       }
       nodes = nextLevel;
     }
-    
+
     for(Node currentNode: nodes)
     {
       System.out.print(currentNode);
@@ -97,6 +97,29 @@ public class Node
       currentNode.setGain(benefit);
       System.out.println(currentNode.getGain());
       currentNode.updateTreeGains();
+    }
+  }
+
+  public void generateLevel()
+  {
+    ArrayList<Node> currentLevel = new ArrayList<Node>();
+    currentLevel.add(this);
+
+    ArrayList<Node> previousLevel = new ArrayList<Node>();
+
+    while(!currentLevel.isEmpty())
+    {
+      ArrayList<Node> nextLevel = new ArrayList<Node>();
+      previousLevel = currentLevel;
+      for(Node node : currentLevel)
+      {
+        nextLevel.addAll(node.getChildren());
+      }
+    }
+
+    for(Node node : previousLevel)
+    {
+      node.createChildren();
     }
   }
 
