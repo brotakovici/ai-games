@@ -210,9 +210,25 @@ public class Node
       return a;
   }
 
-  public Move getMoveMade()
+  public Move getMove()
   {
     return this.moveMade;
+  }
+
+  public Move getMoveToMake()
+  {
+    float maxGain = -1000;
+    Move move;
+
+    for(Node currentNode : this.getChildren())
+    {
+      if(currentNode.getGain() >= maxGain)
+      {
+        maxGain = currentNode.getGain();
+        move = currentNode.getMove();
+      }
+    }  
+    return move;
   }
 
   public void setChildren(ArrayList<Node> children)
