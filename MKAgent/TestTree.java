@@ -7,6 +7,9 @@ import java.io.Reader;
 import java.util.ArrayList;
 
 public class TestTree {
+
+	public static final int DEPTH = 4;
+
 	public static void main(String[] args) {
 		Board b = new Board(7,7);
 
@@ -16,11 +19,16 @@ public class TestTree {
 
 		Node tree = new Node(b, mySide, south);
 
-		tree.generateChildren(8);
+		tree.generateChildren(DEPTH);
 
 
 		ArrayList<Node> level = new ArrayList<Node>();
-		level.add(tree);
+
+		Node randChild = tree.getChildren().get(3);
+
+		randChild.generateLevel(DEPTH);
+		
+		level.add(randChild);
 
 		while(!level.isEmpty())
 		{
