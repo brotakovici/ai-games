@@ -107,7 +107,16 @@ public class Node
       benefit = currentNode.getBoard().getSeedsInStore(currentNode.getBotSide()) - currentNode.getBoard().getSeedsInStore(currentNode.getBotSide().opposite());
       currentNode.setGain(benefit);
 
+      pozNegCount[3][depth]++;
+      if (benefit > 0)
+        pozNegCount[1][depth]++;
+      else if (benefit < 0)
+        pozNegCount[2][depth]++;
+
+      currentNode.getParent().setGain(currentNode.getParent().getGain() + benefit);
+
       pozNegCount = currentNode.updateTreeGains(pozNegCount, depth);
+
     }
   }
 
@@ -133,7 +142,12 @@ public class Node
 
     for(Node node : previousLevel)
     {
-      node.createChildren();
+      ArrayList<Node> children = node.createChildren();
+      node.setChildren(children);
+
+      currentLevel.addAll(node.getChildren());
+
+
     }
 
 
@@ -143,12 +157,23 @@ public class Node
         pozNegCount[i][j] = 0;
 
 
-    for(Node node : this.getChildren())
+    for(Node node : currentLevel)
     {
       int benefit;
       benefit = node.getBoard().getSeedsInStore(node.getBotSide()) - node.getBoard().getSeedsInStore(node.getBotSide().opposite());
       node.setGain(benefit);
+
+      pozNegCount[3][depth]++;
+      if (benefit > 0)
+        pozNegCount[1][depth]++;
+      else if (benefit < 0)
+        pozNegCount[2][depth]++;
+
+      node.getParent().setGain(node.getParent().getGain() + benefit);
+
       pozNegCount = node.updateTreeGains(pozNegCount, depth);
+
+
 
     }
   }
@@ -158,16 +183,6 @@ public class Node
   {
     if(this.getParent() != null)
     {
-      float gain;
-      gain = this.getGain();
-
-      a[3][depth]++;
-      if (gain > 0)
-        a[1][depth]++;
-      else if (gain < 0)
-        a[2][depth]++;
-
-      this.getParent().setGain(this.getParent().getGain() + gain);
       int noOfMoves = this.getParent().getChildren().size();
 
       if (a[3][depth] == noOfMoves)
@@ -192,21 +207,22 @@ public class Node
           this.getParent().setGain(g * (a[2][depth]/a[1][depth]));
         }
 
-        this.getParent().getParent().setGain(this.getParent().getParent().getGain() + this.getParent().getGain());
-
-        if (this.getParent().getGain() > 0)
-          a[1][depth-1]++;
-        else if (this.getParent().getGain() < 0)
-          a[2][depth-1]++;
-
-        a[3][depth-1]++;
-
         a[1][depth] = 0;
         a[2][depth] = 0;
         a[3][depth] = 0;
+          
 
         if (this.getParent().getParent() != null)
         {
+          this.getParent().getParent().setGain(this.getParent().getParent().getGain() + this.getParent().getGain());
+
+          if (this.getParent().getGain() > 0)
+            a[1][depth-1]++;
+          else if (this.getParent().getGain() < 0)
+            a[2][depth-1]++;
+
+          a[3][depth-1]++;
+
           if (a[3][depth-1] == this.getParent().getParent().getChildren().size())
             a = this.getParent().updateTreeGains(a, depth-1);
         }
@@ -286,7 +302,11 @@ public class Node
   // NEEDS IMPLEMENTATION
   public boolean gameWon(Side side)
   {
-    return false;
+    int seedsInStore = this.board.getSeedsInStore(side);
+    if(seedsInStore > 49)
+      return true;
+    else
+      return false;
   }
 
   // When one of the agents can't make a move, because thats the way Kalah returns
@@ -300,10 +320,21 @@ public class Node
   {
     StringBuilder treeString = new StringBuilder();
     treeString.append("It's " + this.turn + " to make a move.\n");
-    treeString.append("Bot's side is: " + this.turn + ".\n");
-    treeString.append("Current level is:" + this.currentDepth + ".\n");
+    treeString.append("Bot's side is: " + this.botSide + ".\n");
+    if(this.moveMade != null)
+    {
+      treeString.append("Previous turn was " + this.moveMade.getSide() + ".\n");
+      treeString.append("Hole selected was " + this.moveMade.getHole() + ".\n");
+    }
+    treeString.append("Current level is: " + this.currentDepth + " .\n");
     treeString.append("This node has " + this.children.size() + " children.\n");
     treeString.append("Current node's projected gain is "+ this.gain + '\n');
+    if(this.getParent() != null)
+    {
+      treeString.append("Parent: \n");
+      treeString.append(this.getParent().getBoard().toString() + '\n');
+      treeString.append("---------------------------------------------------------\n");
+    }
     treeString.append(this.getBoard().toString() + '\n');
 
     return treeString.toString();
