@@ -113,7 +113,7 @@ public class Node
       else if (benefit < 0)
         pozNegCount[2][depth]++;
 
-      this.getParent().setGain(this.getParent().getGain() + benefit);
+      currentNode.getParent().setGain(this.getParent().getGain() + benefit);
 
       pozNegCount = currentNode.updateTreeGains(pozNegCount, depth);
 
@@ -166,7 +166,7 @@ public class Node
       else if (benefit < 0)
         pozNegCount[2][depth]++;
 
-      this.getParent().setGain(this.getParent().getGain() + benefit);
+      node.getParent().setGain(this.getParent().getGain() + benefit);
 
       pozNegCount = node.updateTreeGains(pozNegCount, depth);
 
