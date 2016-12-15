@@ -16,10 +16,12 @@ public class TestTree {
 
 		Node tree = new Node(b, mySide, south);
 
-		tree.generateChildren(4);
+		tree.generateChildren(8);
+
 
 		ArrayList<Node> level = new ArrayList<Node>();
 		level.add(tree);
+
 		while(!level.isEmpty())
 		{
 			ArrayList<Node> nextLevel = new ArrayList<Node>();
@@ -30,5 +32,6 @@ public class TestTree {
 			}
 			level = nextLevel;
 		}
+
 	}
 }
