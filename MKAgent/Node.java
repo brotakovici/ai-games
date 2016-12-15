@@ -107,7 +107,16 @@ public class Node
       benefit = currentNode.getBoard().getSeedsInStore(currentNode.getBotSide()) - currentNode.getBoard().getSeedsInStore(currentNode.getBotSide().opposite());
       currentNode.setGain(benefit);
 
+      pozNegCount[3][depth]++;
+      if (benefit > 0)
+        pozNegCount[1][depth]++;
+      else if (benefit < 0)
+        pozNegCount[2][depth]++;
+
+      this.getParent().setGain(this.getParent().getGain() + gain);
+
       pozNegCount = currentNode.updateTreeGains(pozNegCount, depth);
+
     }
   }
 
@@ -134,6 +143,8 @@ public class Node
     for(Node node : previousLevel)
     {
       node.createChildren();
+      currentLevel.addAll(node.getChildren());
+
     }
 
 
@@ -143,12 +154,23 @@ public class Node
         pozNegCount[i][j] = 0;
 
 
-    for(Node node : this.getChildren())
+    for(Node node : currentLevel)
     {
       int benefit;
       benefit = node.getBoard().getSeedsInStore(node.getBotSide()) - node.getBoard().getSeedsInStore(node.getBotSide().opposite());
       node.setGain(benefit);
+
+      pozNegCount[3][depth]++;
+      if (benefit > 0)
+        pozNegCount[1][depth]++;
+      else if (benefit < 0)
+        pozNegCount[2][depth]++;
+
+      this.getParent().setGain(this.getParent().getGain() + gain);
+
       pozNegCount = node.updateTreeGains(pozNegCount, depth);
+
+
 
     }
   }
@@ -158,16 +180,6 @@ public class Node
   {
     if(this.getParent() != null)
     {
-      float gain;
-      gain = this.getGain();
-
-      a[3][depth]++;
-      if (gain > 0)
-        a[1][depth]++;
-      else if (gain < 0)
-        a[2][depth]++;
-
-      this.getParent().setGain(this.getParent().getGain() + gain);
       int noOfMoves = this.getParent().getChildren().size();
 
       if (a[3][depth] == noOfMoves)
