@@ -142,8 +142,11 @@ public class Node
 
     for(Node node : previousLevel)
     {
-      node.createChildren();
+      ArrayList<Node> children = node.createChildren();
+      node.setChildren(children);
+
       currentLevel.addAll(node.getChildren());
+
 
     }
 
@@ -204,21 +207,22 @@ public class Node
           this.getParent().setGain(g * (a[2][depth]/a[1][depth]));
         }
 
-        this.getParent().getParent().setGain(this.getParent().getParent().getGain() + this.getParent().getGain());
-
-        if (this.getParent().getGain() > 0)
-          a[1][depth-1]++;
-        else if (this.getParent().getGain() < 0)
-          a[2][depth-1]++;
-
-        a[3][depth-1]++;
-
         a[1][depth] = 0;
         a[2][depth] = 0;
         a[3][depth] = 0;
+          
 
         if (this.getParent().getParent() != null)
         {
+          this.getParent().getParent().setGain(this.getParent().getParent().getGain() + this.getParent().getGain());
+
+          if (this.getParent().getGain() > 0)
+            a[1][depth-1]++;
+          else if (this.getParent().getGain() < 0)
+            a[2][depth-1]++;
+
+          a[3][depth-1]++;
+
           if (a[3][depth-1] == this.getParent().getParent().getChildren().size())
             a = this.getParent().updateTreeGains(a, depth-1);
         }
