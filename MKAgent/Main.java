@@ -38,7 +38,6 @@ public class Main
                 break;
             }
         }
-
         return i;
     }
 
@@ -138,6 +137,7 @@ public class Main
 							// 	msj = Protocol.createSwapMsg();
 							// 	sendMsg(msj);
 							// } // if
+
                             if (!r.end){
                                 if (r.again && rootNode == null){
                                     rootNode = new Node(b, mySide, mySide);
@@ -152,7 +152,11 @@ public class Main
                                     }
 
                                 if (!r.again){
-                                    move = new Move(south, r.move);
+                                    if (mySide == north)
+                                        move = new Move(south, r.move);
+                                    else 
+                                        move = new Move(north, r.move);
+
                                     kal.makeMove(b, move);
                                     b = kal.getBoard();
 
@@ -166,7 +170,7 @@ public class Main
 
                                     //mv = mvMk(b, move, kal, mySide);
                                     
-                                    rootNode = updateNode(move.getHole(), rootNode);
+                                    rootNode = updateNode(move, rootNode);
 
                                     msj = Protocol.createMoveMsg(move.getHole());
                                     sendMsg(msj);
