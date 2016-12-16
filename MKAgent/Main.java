@@ -90,6 +90,7 @@ public class Main
 			Side north = Side.values()[0];
 			Side south = Side.values()[1];
 			Side mySide = north; 
+            Side opSide = south;
 
 			Board b = new Board(7,7);
             Kalah kal = new Kalah(b);
@@ -112,6 +113,7 @@ public class Main
 							if (first){
                                 swap = true;
 								mySide = south;
+                                opSide = north;
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
                                 move = new Move(south, b.getNoOfHoles());
@@ -128,12 +130,14 @@ public class Main
 							if (r.move == -1){
                               swap = true;
 							  mySide = north;
+                              opSide = south;
 							}
 
 							// // SwapMove
 							// if (!first && r.move == b.getNoOfHoles() && !swap) {
 							// 	swap = true;
 							// 	mySide = south;
+                            //  opSide = north;
 							// 	msj = Protocol.createSwapMsg();
 							// 	sendMsg(msj);
 							// } // if
@@ -142,20 +146,13 @@ public class Main
                                 if (r.again && rootNode == null){
                                     rootNode = new Node(b, mySide, mySide);
                                     rootNode.generateChildren(DEPTH);
-                                } else if (!r.again && rootNode == null)
-                                    if (mySide == north){
-                                        rootNode = new Node(b, south, mySide);
+                                } else if (!r.again && rootNode == null) {
+                                        rootNode = new Node(b, opSide, mySide);
                                         rootNode.generateChildren(DEPTH);
-                                    } else {
-                                        rootNode = new Node(b, north, mySide);
-                                        rootNode.generateChildren(DEPTH);
-                                    }
+                                }
 
                                 if (!r.again){
-                                    if (mySide == north)
-                                        move = new Move(south, r.move);
-                                    else 
-                                        move = new Move(north, r.move);
+                                    move = new Move(opSide, r.move);
 
                                     kal.makeMove(b, move);
                                     b = kal.getBoard();
@@ -164,15 +161,15 @@ public class Main
                                 }
 
                                 if(r.again){
-                                    move = rootNode.getMoveToMake().getHole();
+                                    move = rootNode.getMoveToMake();
                                     kal.makeMove(b, move);
                                     b = kal.getBoard();
 
                                     //mv = mvMk(b, move, kal, mySide);
                                     
-                                    rootNode = updateNode(move, rootNode);
+                                    rootNode = updateNode(move.getHole(), rootNode);
 
-                                    msj = Protocol.createMoveMsg(move);
+                                    msj = Protocol.createMoveMsg(move.getHole());
                                     sendMsg(msj);
                                 }
                             }               
