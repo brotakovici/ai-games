@@ -32,7 +32,8 @@ public class Node
 
         Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
 
-    	  //child.setGain(child.getBoard.getSeeds(child.getBotSide(), 0) - child.getBoard.getSeeds(child.getBotSide().opposite(), 0));
+        if(maKalahInGuraLor.gameOver())
+          child.setGameOver(true);
 
         children.add(child);
 
@@ -52,6 +53,7 @@ public class Node
     this.children = node.getChildren();
     this.moveMade = null;
     this.gain = 0;
+    this.isGameOver = node.getGameOver();
   }
 
   public Node(Board board, Side turn, Side ourSide)
@@ -65,6 +67,7 @@ public class Node
     this.gain = 0;
     this.botSide = ourSide;
     this.children = new ArrayList<Node>();
+    this.isGameOver = false;
   }
 
   public Node(Board board, Node parentNode, Side turn, Move moveMade, boolean isGameOver)
@@ -78,6 +81,7 @@ public class Node
     this.gain = 0;
     this.botSide = this.getParent().getBotSide();
     this.children = new ArrayList<Node>();
+    this.isGameOver = false;
   }
 
   public int getDepth()
@@ -154,14 +158,15 @@ public class Node
       previousLevel = currentLevel;
       for(Node node : currentLevel)
       {
-        if(!node.getChildren().isEmpty())
+        if(!(node.getGameOver()))
         {
           node.setGain(0);
           nextLevel.addAll(node.getChildren());
         }
-        else
+        
+        if(node.getGameOver())
         {
-          int benefit;
+          float benefit;
           benefit = node.getGain();
 
           pozNegCount[3][depth]++;
@@ -224,26 +229,21 @@ public class Node
 
         float g;
         g = this.getParent().getGain();
-	float gg;
-        if (g > 0)
+	      float gg;
+        if ((g > 0) && (a[2][depth] > a[1][depth]))
         {
-          if (a[2][depth] == 0)
-            a[2][depth]++;
 
-	  gg = a[1][depth]/a[2][depth];
+          gg = a[1][depth]/a[2][depth];
           gg = gg * g;
 
           this.getParent().setGain(gg);
         }
 
-        else if (g < 0)
+        else if ((g < 0) && (a[1][depth] > a[2][depth]))
         {
 
-          if (a[1][depth] == 0)
-            a[1][depth]++;
-
-	  gg = a[2][depth]/a[1][depth];
-	  gg = gg * g;
+          gg = a[2][depth]/a[1][depth];
+	        gg = gg * g;
 
           this.getParent().setGain(gg);
         }
@@ -271,6 +271,11 @@ public class Node
     }
 
       return a;
+  }
+
+  public void getGameOver(Node node)
+  {
+    return node.isGameOver;
   }
 
   public Move getMoveMade()
@@ -348,6 +353,11 @@ public class Node
       return true;
     else
       return false;
+  }
+
+  public void setGameOver(boolean b)
+  {
+    this.isGameOver = b;
   }
 
   // When one of the agents can't make a move, because thats the way Kalah returns
