@@ -134,19 +134,46 @@ public class Node
 
   public void generateLevel(int depth)
   {
+    
     ArrayList<Node> currentLevel = new ArrayList<Node>();
     currentLevel.add(this);
 
     ArrayList<Node> previousLevel = new ArrayList<Node>();
+    
+    float[][] pozNegCount = new float[4][depth + 1];
+    for(int i = 1; i <= 3; i++)
+      for(int j = 1; j <= depth; j++)
+        pozNegCount[i][j] = 0;
+
+    depth = 0;
 
     while(!currentLevel.isEmpty())
     {
+      depth++;
       ArrayList<Node> nextLevel = new ArrayList<Node>();
       previousLevel = currentLevel;
       for(Node node : currentLevel)
       {
-        node.setGain(0);
-        nextLevel.addAll(node.getChildren());
+        if(!node.getChildren().isEmpty())
+        {
+          node.setGain(0);
+          nextLevel.addAll(node.getChildren());
+        }
+        else
+        {
+          int benefit;
+          benefit = node.getGain();
+
+          pozNegCount[3][depth]++;
+          if (benefit > 0)
+            pozNegCount[1][depth]++;
+          else if (benefit < 0)
+            pozNegCount[2][depth]++;
+
+           node.getParent().setGain(node.getParent().getGain() + benefit);
+
+           pozNegCount = node.updateTreeGains(pozNegCount, depth);
+        }
       }
       currentLevel = nextLevel;
     }
@@ -155,18 +182,13 @@ public class Node
     for(Node node : previousLevel)
     {
       ArrayList<Node> children = node.createChildren();
-      node.setChildren(children);
-
-      currentLevel.addAll(node.getChildren());
-
+      if(!node.getChildren().isEmpty())
+      {
+        node.setChildren(children);
+        currentLevel.addAll(node.getChildren());
+      }
 
     }
-
-
-    float[][] pozNegCount = new float[4][depth + 1];
-    for(int i = 1; i <= 3; i++)
-      for(int j = 1; j <= depth; j++)
-        pozNegCount[i][j] = 0;
 
 
     for(Node node : currentLevel)
