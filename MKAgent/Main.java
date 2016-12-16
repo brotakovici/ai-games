@@ -28,19 +28,6 @@ public class Main
     	System.out.flush();
     }
 
-    public static int mvMk (Board b, Move move, Kalah kal, Side mySide) {
-        int i = 0;
-        for (i = 1; i <= 7; i++){
-            if (b.getSeeds(mySide, i) != 0){
-                move = new Move(mySide, i);
-                kal.makeMove(b, move);
-                b = kal.getBoard();
-                break;
-            }
-        }
-        return i;
-    }
-
     public static Node updateNode (int move, Node rootNode){
         ArrayList<Node> asda = rootNode.getChildren();
         for(Node node : asda) {
@@ -84,7 +71,6 @@ public class Main
 	{
     	try {
 			String s, msj;
-            int mv = 0;
 			boolean first = true, swap = false;
 
 			Side north = Side.values()[0];
@@ -95,8 +81,8 @@ public class Main
 			Board b = new Board(7,7);
             Kalah kal = new Kalah(b);
             Move move = null;
-
             Node rootNode = null;
+            Protocol.MoveTurn r = null;
 
 			while (true){
 				System.err.println();
@@ -119,19 +105,22 @@ public class Main
                                 move = new Move(south, b.getNoOfHoles());
                                 kal.makeMove(b, move);
                                 b = kal.getBoard();
-							} // if
+							} else { 
+                                rootNode = new Node(b, opSide, mySide);
+                                rootNode.generateChildren(DEPTH);
+                            }
 
 							System.err.println("Starting player? " + first);
 							break; // Start
 						case STATE: 
-							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
+							 r = Protocol.interpretStateMsg(s, b);
 
-							// If opponent swaps
-							if (r.move == -1){
-                              swap = true;
-							  mySide = north;
-                              opSide = south;
-							}
+							// // If opponent swaps
+							// if (r.move == -1){
+                            //   swap = true;
+							//   mySide = north;
+                            //   opSide = south;
+							// }
 
 							// // SwapMove
 							// if (!first && r.move == b.getNoOfHoles() && !swap) {
@@ -142,37 +131,41 @@ public class Main
 							// 	sendMsg(msj);
 							// } // if
 
-                            if (!r.end){
-                                if (r.again && rootNode == null){
-                                    rootNode = new Node(b, mySide, mySide);
-                                    rootNode.generateChildren(DEPTH);
-                                } else if (!r.again && rootNode == null) {
-                                        rootNode = new Node(b, opSide, mySide);
-                                        rootNode.generateChildren(DEPTH);
-                                }
+                            // if (!r.end){
+                            //     if (r.again && rootNode == null){
+                            //         rootNode = new Node(b, mySide, mySide);
+                            //         rootNode.generateChildren(DEPTH);
+                            //     } else if (!r.again && rootNode == null) {
+                            //             rootNode = new Node(b, opSide, mySide);
+                            //             rootNode.generateChildren(DEPTH);
+                            //     }
 
-                                if (!r.again){
-                                    move = new Move(opSide, r.move);
+                            //     if(r.again){
+                            //         move = rootNode.getMoveToMake();
+                            //         kal.makeMove(b, move);
+                            //         b = kal.getBoard();
+                                    
+                            //         rootNode = updateNode(move.getHole(), rootNode);
 
-                                    kal.makeMove(b, move);
-                                    b = kal.getBoard();
+                            //         msj = Protocol.createMoveMsg(move.getHole());
+                            //         sendMsg(msj);
+                            //     }
+                            // }               
 
-                                    rootNode = updateNode(r.move, rootNode);
-                                }
-
-                                if(r.again){
-                                    move = rootNode.getMoveToMake();
-                                    kal.makeMove(b, move);
-                                    b = kal.getBoard();
-
-                                    //mv = mvMk(b, move, kal, mySide);
+                            if(r.again){
+                                    if (rootNode == null)
+                                    {
+                                      rootNode = new Node(b, mySide, mySide);
+                                      rootNode.generateChildren(DEPTH);
+                                    }
+                                    else
+                                      rootNode = updateNode(r.move, rootNode);
                                     
                                     rootNode = updateNode(move.getHole(), rootNode);
 
                                     msj = Protocol.createMoveMsg(move.getHole());
                                     sendMsg(msj);
-                                }
-                            }               
+                            }
 
 							System.err.println("A state.");
 							System.err.println("This was the move: " + r.move);
