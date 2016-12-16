@@ -42,6 +42,18 @@ public class Node
     return children;
   }
 
+  public Node (Node node)
+  {
+    this.turn = node.getTurn();
+    this.botSide = node.getBotSide();
+    this.currentDepth = node.getDepth();
+    this.board = node.getBoard();
+    this.parentNode = null;
+    this.children = node.getChildren();
+    this.moveMade = null;
+    this.gain = 0;
+  }
+
   public Node(Board board, Side turn, Side ourSide)
   {
     this.currentDepth = 0;
@@ -95,7 +107,7 @@ public class Node
       nodes = nextLevel;
     }
 
-    int[][] pozNegCount = new int[4][depth + 1];
+    float[][] pozNegCount = new float[4][depth + 1];
     for(int i = 1; i <= 3; i++)
       for(int j = 1; j <= depth; j++)
         pozNegCount[i][j] = 0;
@@ -151,7 +163,7 @@ public class Node
     }
 
 
-    int[][] pozNegCount = new int[4][depth + 1];
+    float[][] pozNegCount = new float[4][depth + 1];
     for(int i = 1; i <= 3; i++)
       for(int j = 1; j <= depth; j++)
         pozNegCount[i][j] = 0;
@@ -179,7 +191,7 @@ public class Node
   }
 
   //Method for updating the gains on each node
-  public int[][] updateTreeGains(int[][] a, int depth)
+  public float[][] updateTreeGains(float[][] a, int depth)
   {
     if(this.getParent() != null)
     {
@@ -190,12 +202,16 @@ public class Node
 
         float g;
         g = this.getParent().getGain();
+	float gg;
         if (g > 0)
         {
           if (a[2][depth] == 0)
             a[2][depth]++;
 
-          this.getParent().setGain(g * (a[1][depth]/a[2][depth]));
+	  gg = a[1][depth]/a[2][depth];
+          gg = gg * g;
+
+          this.getParent().setGain(gg);
         }
 
         else if (g < 0)
@@ -204,7 +220,10 @@ public class Node
           if (a[1][depth] == 0)
             a[1][depth]++;
 
-          this.getParent().setGain(g * (a[2][depth]/a[1][depth]));
+	  gg = a[2][depth]/a[1][depth];
+	  gg = gg * g;
+
+          this.getParent().setGain(gg);
         }
 
         a[1][depth] = 0;

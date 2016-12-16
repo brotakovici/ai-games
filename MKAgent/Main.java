@@ -45,7 +45,7 @@ public class Main
         ArrayList<Node> asda = rootNode.getChildren();
         for(Node node : asda) {
             if(node.getMoveMade().getHole() == move){
-                rootNode = node;
+                rootNode = new Node(node);
                 rootNode.generateLevel(DEPTH);
             }
         }
@@ -109,7 +109,7 @@ public class Main
 							first = Protocol.interpretStartMsg(s);
 
 							// SuperMove
-							if (first && !swap){
+							if (first){
                                 swap = true;
 								mySide = south;
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
@@ -124,11 +124,11 @@ public class Main
 						case STATE: 
 							Protocol.MoveTurn r = Protocol.interpretStateMsg(s, b);
 
-							// // If opponent swaps
-							// if (r.move == -1){
-                            //  swap = true;
-							// 	mySide = north;
-							// }
+							// If opponent swaps
+							if (r.move == -1){
+                              swap = true;
+							  mySide = north;
+							}
 
 							// // SwapMove
 							// if (!first && r.move == b.getNoOfHoles() && !swap) {
@@ -164,7 +164,7 @@ public class Main
                                 }
 
                                 if(r.again){
-                                    move = rootNode.getMoveToMake();
+                                    move = rootNode.getMoveToMake().getHole();
                                     kal.makeMove(b, move);
                                     b = kal.getBoard();
 
@@ -172,7 +172,7 @@ public class Main
                                     
                                     rootNode = updateNode(move, rootNode);
 
-                                    msj = Protocol.createMoveMsg(move.getHole());
+                                    msj = Protocol.createMoveMsg(move);
                                     sendMsg(msj);
                                 }
                             }               
