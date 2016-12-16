@@ -26,9 +26,11 @@ public class Node
       Move attemptedMove = new Move(this.turn, index);
       Kalah maKalahInGuraLor = new Kalah(tempBoard);
 
-      if(!maKalahInGuraLor.gameOver() && maKalahInGuraLor.isLegalMove(attemptedMove))
+      if((!maKalahInGuraLor.gameOver()) && (maKalahInGuraLor.isLegalMove(attemptedMove)))
       {
         Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
+        if (this.getParent() == null && this.getBotSide() == Side.values()[0])
+        	childTurn = childTurn.opposite();
 
         Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
 
@@ -187,12 +189,8 @@ public class Node
     for(Node node : previousLevel)
     {
       ArrayList<Node> children = node.createChildren();
-      if(!node.getChildren().isEmpty())
-      {
-        node.setChildren(children);
-        currentLevel.addAll(node.getChildren());
-      }
-
+      node.setChildren(children);
+      currentLevel.addAll(node.getChildren());
     }
 
 
@@ -273,9 +271,9 @@ public class Node
       return a;
   }
 
-  public void getGameOver(Node node)
+  public boolean getGameOver()
   {
-    return node.isGameOver;
+    return this.isGameOver;
   }
 
   public Move getMoveMade()

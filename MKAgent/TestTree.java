@@ -30,8 +30,11 @@ public class TestTree {
 		
 		level.add(randChild);
 
-		while(!level.isEmpty())
+		//int i = 0;
+		while(!level.isEmpty()) 
+              //&&		i<3)
 		{
+			//i++;
 			ArrayList<Node> nextLevel = new ArrayList<Node>();
 			for(Node node : level)
 			{
