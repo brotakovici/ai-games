@@ -36,9 +36,7 @@ public class Main
                 rootNode.generateLevel(DEPTH);
             }
         }
-
         return rootNode;
-
     } // updateNode
 
     /**
@@ -100,11 +98,10 @@ public class Main
                                 opSide = north;
 								msj = Protocol.createMoveMsg(b.getNoOfHoles());
 								sendMsg(msj);
-                                move = new Move(south, b.getNoOfHoles());
-                                kal.makeMove(b, move);
-                                b = kal.getBoard();
 							} else { 
-                                rootNode = new Node(b, mySide, mySide);
+                                mySide = north;
+                                opSide = south;
+                                rootNode = new Node(b, opSide, mySide);
                                 rootNode.generateChildren(DEPTH);
                             }
 
@@ -125,46 +122,28 @@ public class Main
                                 swap = true;
 								mySide = south;
                                 opSide = north;
-                                rootNode = new Node(b, mySide, mySide);
-                                rootNode.generateChildren(DEPTH);
+                                rootNode = null;
 								msj = Protocol.createSwapMsg();
 								sendMsg(msj);
-							} // if
+							} else {
+                                swap = true;
 
-                            // if (!r.end){
-                            //     if (r.again && rootNode == null){
-                            //         rootNode = new Node(b, mySide, mySide);
-                            //         rootNode.generateChildren(DEPTH);
-                            //     } else if (!r.again && rootNode == null) {
-                            //             rootNode = new Node(b, opSide, mySide);
-                            //             rootNode.generateChildren(DEPTH);
-                            //     }
+                                if(r.again){
+                                    if (rootNode == null) {
+                                        rootNode = new Node(b, mySide, mySide);
+                                        rootNode.generateChildren(DEPTH);
+                                    } else {
+                                        rootNode = updateNode(r.move, rootNode);
+                                    }
 
-                            //     if(r.again){
-                            //         move = rootNode.getMoveToMake();
-                            //         kal.makeMove(b, move);
-                            //         b = kal.getBoard();
-                                    
-                            //         rootNode = updateNode(move.getHole(), rootNode);
+                                    move = rootNode.getMoveToMake();
 
-                            //         msj = Protocol.createMoveMsg(move.getHole());
-                            //         sendMsg(msj);
-                            //     }
-                            // }               
-
-                            if(r.again){
-                                if (rootNode == null) {
-                                    rootNode = new Node(b, mySide, mySide);
-                                    rootNode.generateChildren(DEPTH);
-                                } else
-                                    rootNode = updateNode(r.move, rootNode);
-
-                                move = rootNode.getMoveToMake();
-
-                                msj = Protocol.createMoveMsg(move.getHole());
-                                sendMsg(msj);
-
-                                rootNode = updateNode(move.getHole(), rootNode);
+                                    msj = Protocol.createMoveMsg(move.getHole());
+                                    sendMsg(msj);
+                                } else {
+                                    if (rootNode != null)
+                                        rootNode = updateNode(r.move, rootNode);
+                                }
                             }
 
 							System.err.println("A state.");
