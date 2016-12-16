@@ -24,17 +24,17 @@ public class Node
     {
       Board tempBoard = new Board(this.getBoard());
       Move attemptedMove = new Move(this.turn, index);
-      Kalah maKalahInGuraLor = new Kalah(tempBoard);
+      Kalah maKalah = new Kalah(tempBoard);
 
-      if((!maKalahInGuraLor.gameOver()) && (maKalahInGuraLor.isLegalMove(attemptedMove)))
+      if((!maKalah.gameOver()) && (maKalah.isLegalMove(attemptedMove)))
       {
-        Side childTurn = maKalahInGuraLor.makeMove(attemptedMove);
+        Side childTurn = maKalah.makeMove(attemptedMove);
         if (this.getParent() == null && this.getBotSide() == Side.values()[0])
         	childTurn = childTurn.opposite();
 
-        Node child = new Node(maKalahInGuraLor.getBoard(), this, childTurn, attemptedMove, maKalahInGuraLor.gameOver());
+        Node child = new Node(maKalah.getBoard(), this, childTurn, attemptedMove, maKalah.gameOver());
 
-        if(maKalahInGuraLor.gameOver())
+        if(maKalah.gameOver())
           child.setGameOver(true);
 
         children.add(child);
@@ -344,6 +344,7 @@ public class Node
 
   // Checks if side has half + 1 seeds in well
   // NEEDS IMPLEMENTATION
+  //Aborted
   public boolean gameWon(Side side)
   {
     int seedsInStore = this.board.getSeedsInStore(side);
